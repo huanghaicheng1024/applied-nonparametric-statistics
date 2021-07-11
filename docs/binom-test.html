@@ -24,7 +24,7 @@
 <meta name="author" content="Huang" />
 
 
-<meta name="date" content="2021-06-23" />
+<meta name="date" content="2021-07-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -191,7 +191,101 @@ H_0:\ p=p_0\qquad v.s. \qquad H_1:\ ?
 </div>
 <div id="习题" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> 习题</h2>
-<p>1、某学校初中三年级学生的体重的随机样本有如下20个数据（单位：kg）：</p>
+<div id="习题1" class="section level3" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> 习题1</h3>
+<p>已知某中昆虫的20%显示出特性A，在非正常的环境下得到18条昆虫，其中没有一条具有特性A。那么假设在这种环境下，此种昆虫和通常环境一样有0.2的概率显示特性A，这合理吗？取显著性水平<span class="math inline">\(\alpha=0.05\)</span>，用双边检验。</p>
+<p><strong>解：</strong></p>
+<p>基于二项分布的检验问题：
+<span class="math display">\[
+p=0.2\qquad v.s.\qquad p\ne0.2
+\]</span></p>
+<p>利用R：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="binom-test.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> <span class="dv">0</span>,<span class="at">n =</span> <span class="dv">18</span>,<span class="at">p =</span> <span class="fl">0.2</span>,<span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>)</span>
+<span id="cb2-2"><a href="binom-test.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-3"><a href="binom-test.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb2-4"><a href="binom-test.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-5"><a href="binom-test.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  0 and 18</span></span>
+<span id="cb2-6"><a href="binom-test.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 0, number of trials = 18, p-value = 0.03</span></span>
+<span id="cb2-7"><a href="binom-test.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is not equal to 0.2</span></span>
+<span id="cb2-8"><a href="binom-test.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb2-9"><a href="binom-test.html#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.000 0.185</span></span>
+<span id="cb2-10"><a href="binom-test.html#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb2-11"><a href="binom-test.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb2-12"><a href="binom-test.html#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                      0</span></span></code></pre></div>
+<p>p值小于0.05，故应当拒绝原假设，即假设在这种环境下，此种昆虫和通常环境一样有0.2的概率显示特性A，这不合理。</p>
+</div>
+<div id="习题2" class="section level3" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> 习题2</h3>
+<p>在一次安全月活动中，所检验的16辆车中有6辆是不安全的。试在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，检验原假设：这些车中有不多于10%的车是安全的。</p>
+<p><strong>解：</strong></p>
+<p>设<span class="math inline">\(p\)</span>是车辆不安全的概率，有基于二项分布的检验问题：
+<span class="math display">\[
+p\le0.1 \qquad v.s. \qquad p&gt;0.1
+\]</span></p>
+<p>利用R：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="binom-test.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> <span class="dv">6</span>,<span class="at">n =</span> <span class="dv">16</span>,<span class="at">p =</span> <span class="fl">0.1</span>,<span class="at">alternative =</span> <span class="st">&quot;greater&quot;</span>)</span>
+<span id="cb3-2"><a href="binom-test.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-3"><a href="binom-test.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb3-4"><a href="binom-test.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-5"><a href="binom-test.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  6 and 16</span></span>
+<span id="cb3-6"><a href="binom-test.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 6, number of trials = 16, p-value = 0.003</span></span>
+<span id="cb3-7"><a href="binom-test.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is greater than 0.1</span></span>
+<span id="cb3-8"><a href="binom-test.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb3-9"><a href="binom-test.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.178 1.000</span></span>
+<span id="cb3-10"><a href="binom-test.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb3-11"><a href="binom-test.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb3-12"><a href="binom-test.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.375</span></span></code></pre></div>
+<p><span class="math inline">\(p\)</span>值小于0.05，应当拒绝原假设。</p>
+</div>
+<div id="习题3" class="section level3" number="1.2.3">
+<h3><span class="header-section-number">1.2.3</span> 习题3</h3>
+<p>某一居民小区向市政府报告说，至少有60%的居民认同小区改造建设。市政府随后就随机调查了100个居民，其中48人同意这种小区改造建设。问在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，检验这个居民小区的报告是否合理。</p>
+<p><strong>解：</strong></p>
+<p>同意小区改造假设的居民人数服从二项分布，<span class="math inline">\(p\)</span>为同意的概率。检验问题：
+<span class="math display">\[
+p \ge 0.6 \qquad v.s. \qquad p&lt;0.6
+\]</span>
+利用R：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="binom-test.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> <span class="dv">48</span>,<span class="at">n =</span> <span class="dv">100</span>,<span class="at">p =</span> <span class="fl">0.6</span>,<span class="at">alternative =</span> <span class="st">&quot;less&quot;</span>)</span>
+<span id="cb4-2"><a href="binom-test.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-3"><a href="binom-test.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb4-4"><a href="binom-test.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-5"><a href="binom-test.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  48 and 100</span></span>
+<span id="cb4-6"><a href="binom-test.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 48, number of trials = 100, p-value = 0.01</span></span>
+<span id="cb4-7"><a href="binom-test.html#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is less than 0.6</span></span>
+<span id="cb4-8"><a href="binom-test.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb4-9"><a href="binom-test.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.000 0.567</span></span>
+<span id="cb4-10"><a href="binom-test.html#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb4-11"><a href="binom-test.html#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb4-12"><a href="binom-test.html#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                   0.48</span></span></code></pre></div>
+<p><span class="math inline">\(p\)</span>值小于0.05，故应当拒绝原假设，即认为这个居民小区的报告不合理。</p>
+</div>
+<div id="习题4" class="section level3" number="1.2.4">
+<h3><span class="header-section-number">1.2.4</span> 习题4</h3>
+<p>据估计，目前做前列腺手术的男性中有一半正遭受某种副作用的影响。为了努力减轻这种副作用的可能性，FDA研究了一种新的手术方法。19例受手术者只有3人有这种不良副作用，由此得出这项新手术方法能有效减轻副作用，这个结论可靠吗？取显著性水平<span class="math inline">\(\alpha=0.05\)</span>。</p>
+<p><strong>解：</strong></p>
+<p>有不良副作用的受手术者人数服从二项分布，<span class="math inline">\(p\)</span>为有不良副作用的概率，为了保护原假设，检验问题：
+<span class="math display">\[
+p\ge0.5\qquad v.s. \qquad p&lt;0.5
+\]</span>
+利用R：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="binom-test.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> <span class="dv">3</span>,<span class="at">n =</span> <span class="dv">19</span>,<span class="at">p =</span> <span class="fl">0.5</span>,<span class="at">alternative =</span> <span class="st">&quot;less&quot;</span>)</span>
+<span id="cb5-2"><a href="binom-test.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-3"><a href="binom-test.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb5-4"><a href="binom-test.html#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-5"><a href="binom-test.html#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  3 and 19</span></span>
+<span id="cb5-6"><a href="binom-test.html#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 3, number of trials = 19, p-value = 0.002</span></span>
+<span id="cb5-7"><a href="binom-test.html#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is less than 0.5</span></span>
+<span id="cb5-8"><a href="binom-test.html#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb5-9"><a href="binom-test.html#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.000 0.359</span></span>
+<span id="cb5-10"><a href="binom-test.html#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb5-11"><a href="binom-test.html#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb5-12"><a href="binom-test.html#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.158</span></span></code></pre></div>
+<p><span class="math inline">\(p\)</span>值小于0.05，即可以认为结论可靠。</p>
+</div>
+<div id="习题5" class="section level3" number="1.2.5">
+<h3><span class="header-section-number">1.2.5</span> 习题5</h3>
+<p>某学校初中三年级学生的体重的随机样本有如下20个数据（单位：kg）：</p>
 <p>71, 67, 49, 59.5, 65.5, 51.5, 77, 61, 46.5, 68.5,</p>
 <p>43, 59.5, 80.5, 77, 79, 82.5, 40.5, 58.5, 64, 51.5.</p>
 <p>试在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，检验下面的假设：</p>
@@ -199,76 +293,236 @@ H_0:\ p=p_0\qquad v.s. \qquad H_1:\ ?
 <p>（2）95%分位数至少是75；</p>
 <p>（3）30%分位数小于等于45。</p>
 <p><strong>解：</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="binom-test.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 先载入数据</span></span>
-<span id="cb2-2"><a href="binom-test.html#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">71</span>, <span class="dv">67</span>, <span class="dv">49</span>, <span class="fl">59.5</span>, <span class="fl">65.5</span>, <span class="fl">51.5</span>, <span class="dv">77</span>, <span class="dv">61</span>, <span class="fl">46.5</span>, <span class="fl">68.5</span>, </span>
-<span id="cb2-3"><a href="binom-test.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dv">43</span>, <span class="fl">59.5</span>, <span class="fl">80.5</span>, <span class="dv">77</span>, <span class="dv">79</span>, <span class="fl">82.5</span>, <span class="fl">40.5</span>, <span class="fl">58.5</span>, <span class="dv">64</span>, <span class="fl">51.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="binom-test.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 先载入数据</span></span>
+<span id="cb6-2"><a href="binom-test.html#cb6-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">71</span>, <span class="dv">67</span>, <span class="dv">49</span>, <span class="fl">59.5</span>, <span class="fl">65.5</span>, <span class="fl">51.5</span>, <span class="dv">77</span>, <span class="dv">61</span>, <span class="fl">46.5</span>, <span class="fl">68.5</span>, </span>
+<span id="cb6-3"><a href="binom-test.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dv">43</span>, <span class="fl">59.5</span>, <span class="fl">80.5</span>, <span class="dv">77</span>, <span class="dv">79</span>, <span class="fl">82.5</span>, <span class="fl">40.5</span>, <span class="fl">58.5</span>, <span class="dv">64</span>, <span class="fl">51.5</span>)</span></code></pre></div>
 <p>（1）利用符号检验</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="binom-test.html#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fl">51.5</span></span>
-<span id="cb3-2"><a href="binom-test.html#cb3-2" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&lt;</span>x) <span class="co"># 小于中位数个数</span></span>
-<span id="cb3-3"><a href="binom-test.html#cb3-3" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&gt;</span>x) <span class="co"># 大于中位数个数</span></span>
-<span id="cb3-4"><a href="binom-test.html#cb3-4" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">==</span>x) <span class="co"># 等于中位数个数</span></span>
-<span id="cb3-5"><a href="binom-test.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S2,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.5</span>,<span class="at">alternative =</span> <span class="st">&quot;two.side&quot;</span>) <span class="co"># 去掉S0</span></span>
-<span id="cb3-6"><a href="binom-test.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-7"><a href="binom-test.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
-<span id="cb3-8"><a href="binom-test.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-9"><a href="binom-test.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S2 and S1 + S2</span></span>
-<span id="cb3-10"><a href="binom-test.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 14, number of trials = 18, p-value = 0.03</span></span>
-<span id="cb3-11"><a href="binom-test.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is not equal to 0.5</span></span>
-<span id="cb3-12"><a href="binom-test.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
-<span id="cb3-13"><a href="binom-test.html#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.524 0.936</span></span>
-<span id="cb3-14"><a href="binom-test.html#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
-<span id="cb3-15"><a href="binom-test.html#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
-<span id="cb3-16"><a href="binom-test.html#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.778</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="binom-test.html#cb7-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fl">51.5</span></span>
+<span id="cb7-2"><a href="binom-test.html#cb7-2" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&lt;</span>x) <span class="co"># 小于中位数个数</span></span>
+<span id="cb7-3"><a href="binom-test.html#cb7-3" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&gt;</span>x) <span class="co"># 大于中位数个数</span></span>
+<span id="cb7-4"><a href="binom-test.html#cb7-4" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">==</span>x) <span class="co"># 等于中位数个数</span></span>
+<span id="cb7-5"><a href="binom-test.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S2,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.5</span>,<span class="at">alternative =</span> <span class="st">&quot;two.side&quot;</span>) <span class="co"># 去掉S0</span></span>
+<span id="cb7-6"><a href="binom-test.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-7"><a href="binom-test.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb7-8"><a href="binom-test.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-9"><a href="binom-test.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S2 and S1 + S2</span></span>
+<span id="cb7-10"><a href="binom-test.html#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 14, number of trials = 18, p-value = 0.03</span></span>
+<span id="cb7-11"><a href="binom-test.html#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is not equal to 0.5</span></span>
+<span id="cb7-12"><a href="binom-test.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb7-13"><a href="binom-test.html#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.524 0.936</span></span>
+<span id="cb7-14"><a href="binom-test.html#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb7-15"><a href="binom-test.html#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb7-16"><a href="binom-test.html#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.778</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值小于<span class="math inline">\(0.05\)</span>，故应当拒绝假设（1）.</p>
 <p>（2）原假设等价于95%分位数大于等于75，也即若75是<span class="math inline">\(p_0\)</span>分位数，则<span class="math inline">\(p_0\le0.95\)</span>。故检验问题为分位数检验：
 <span class="math display">\[
 H_0:\ p_0\le0.95\qquad v.s. \qquad H_1:\ p_0&gt;0.95
 \]</span></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="binom-test.html#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">75</span></span>
-<span id="cb4-2"><a href="binom-test.html#cb4-2" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&lt;</span>x) </span>
-<span id="cb4-3"><a href="binom-test.html#cb4-3" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&gt;</span>x) </span>
-<span id="cb4-4"><a href="binom-test.html#cb4-4" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">==</span>x) </span>
-<span id="cb4-5"><a href="binom-test.html#cb4-5" aria-hidden="true" tabindex="-1"></a>S0</span>
-<span id="cb4-6"><a href="binom-test.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="binom-test.html#cb8-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">75</span></span>
+<span id="cb8-2"><a href="binom-test.html#cb8-2" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&lt;</span>x) </span>
+<span id="cb8-3"><a href="binom-test.html#cb8-3" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&gt;</span>x) </span>
+<span id="cb8-4"><a href="binom-test.html#cb8-4" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">==</span>x) </span>
+<span id="cb8-5"><a href="binom-test.html#cb8-5" aria-hidden="true" tabindex="-1"></a>S0</span>
+<span id="cb8-6"><a href="binom-test.html#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
 <p>由于没有数据严格等于75，可实用二项检验：</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="binom-test.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S1,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.95</span>,<span class="at">alternative =</span> <span class="st">&quot;greater&quot;</span>) </span>
-<span id="cb5-2"><a href="binom-test.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-3"><a href="binom-test.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
-<span id="cb5-4"><a href="binom-test.html#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-5"><a href="binom-test.html#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S1 and S1 + S2</span></span>
-<span id="cb5-6"><a href="binom-test.html#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 15, number of trials = 20, p-value = 1</span></span>
-<span id="cb5-7"><a href="binom-test.html#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is greater than 0.95</span></span>
-<span id="cb5-8"><a href="binom-test.html#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
-<span id="cb5-9"><a href="binom-test.html#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.544 1.000</span></span>
-<span id="cb5-10"><a href="binom-test.html#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
-<span id="cb5-11"><a href="binom-test.html#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
-<span id="cb5-12"><a href="binom-test.html#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                   0.75</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="binom-test.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S1,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.95</span>,<span class="at">alternative =</span> <span class="st">&quot;greater&quot;</span>) </span>
+<span id="cb9-2"><a href="binom-test.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-3"><a href="binom-test.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb9-4"><a href="binom-test.html#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-5"><a href="binom-test.html#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S1 and S1 + S2</span></span>
+<span id="cb9-6"><a href="binom-test.html#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 15, number of trials = 20, p-value = 1</span></span>
+<span id="cb9-7"><a href="binom-test.html#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is greater than 0.95</span></span>
+<span id="cb9-8"><a href="binom-test.html#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb9-9"><a href="binom-test.html#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.544 1.000</span></span>
+<span id="cb9-10"><a href="binom-test.html#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb9-11"><a href="binom-test.html#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb9-12"><a href="binom-test.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                   0.75</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值很大，可以接受假设（2）.</p>
 <p>（3）类似于（2），可以得到分位数检验问题：</p>
 <p><span class="math display">\[
 H_0:\ p_0\ge0.3\qquad v.s. \qquad H_1:\ p_0&lt;0.3
 \]</span></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="binom-test.html#cb6-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">45</span></span>
-<span id="cb6-2"><a href="binom-test.html#cb6-2" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&lt;</span>x) </span>
-<span id="cb6-3"><a href="binom-test.html#cb6-3" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&gt;</span>x) </span>
-<span id="cb6-4"><a href="binom-test.html#cb6-4" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">==</span>x) </span>
-<span id="cb6-5"><a href="binom-test.html#cb6-5" aria-hidden="true" tabindex="-1"></a>S0</span>
-<span id="cb6-6"><a href="binom-test.html#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="binom-test.html#cb10-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">45</span></span>
+<span id="cb10-2"><a href="binom-test.html#cb10-2" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&lt;</span>x) </span>
+<span id="cb10-3"><a href="binom-test.html#cb10-3" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">&gt;</span>x) </span>
+<span id="cb10-4"><a href="binom-test.html#cb10-4" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="fu">sum</span>(data<span class="sc">==</span>x) </span>
+<span id="cb10-5"><a href="binom-test.html#cb10-5" aria-hidden="true" tabindex="-1"></a>S0</span>
+<span id="cb10-6"><a href="binom-test.html#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
 <p>由于没有数据严格等于45，可实用二项检验：</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="binom-test.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S1,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.3</span>,<span class="at">alternative =</span> <span class="st">&quot;less&quot;</span>) </span>
-<span id="cb7-2"><a href="binom-test.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-3"><a href="binom-test.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
-<span id="cb7-4"><a href="binom-test.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-5"><a href="binom-test.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S1 and S1 + S2</span></span>
-<span id="cb7-6"><a href="binom-test.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 2, number of trials = 20, p-value = 0.04</span></span>
-<span id="cb7-7"><a href="binom-test.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is less than 0.3</span></span>
-<span id="cb7-8"><a href="binom-test.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
-<span id="cb7-9"><a href="binom-test.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.000 0.283</span></span>
-<span id="cb7-10"><a href="binom-test.html#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
-<span id="cb7-11"><a href="binom-test.html#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
-<span id="cb7-12"><a href="binom-test.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.1</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="binom-test.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S1,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.3</span>,<span class="at">alternative =</span> <span class="st">&quot;less&quot;</span>) </span>
+<span id="cb11-2"><a href="binom-test.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-3"><a href="binom-test.html#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb11-4"><a href="binom-test.html#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-5"><a href="binom-test.html#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S1 and S1 + S2</span></span>
+<span id="cb11-6"><a href="binom-test.html#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 2, number of trials = 20, p-value = 0.04</span></span>
+<span id="cb11-7"><a href="binom-test.html#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is less than 0.3</span></span>
+<span id="cb11-8"><a href="binom-test.html#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb11-9"><a href="binom-test.html#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.000 0.283</span></span>
+<span id="cb11-10"><a href="binom-test.html#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb11-11"><a href="binom-test.html#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb11-12"><a href="binom-test.html#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.1</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值小于<span class="math inline">\(0.05\)</span>，应当拒绝假设（3）.</p>
+</div>
+<div id="习题6" class="section level3" number="1.2.6">
+<h3><span class="header-section-number">1.2.6</span> 习题6</h3>
+<p>大学新生入学后需要参加一个特殊的高中学业考试，多年以来成绩的上四分位数是72.某高中有16名毕业生上了大学，他们参加了考试，得分如下：</p>
+<p>70,92,73,60,81,63,92,68,</p>
+<p>75,82,76,72,62,58,95,92</p>
+<p>认为这16个学生是这所高中上大学的所有学生的一个随机样本。试在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，检验上面所给出的分数是来自一个上四分位数为72的总体。</p>
+<p><strong>解：</strong></p>
+<p>分位数的检验问题。设<span class="math inline">\(X\)</span>为总体，检验问题：
+<span class="math display">\[
+X的75\%分位数为72\quad v.s. \quad X的75\%分位数不是72
+\]</span></p>
+<p>因为数据中有严格等于72的数据，所以下面考虑手动计算。</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="binom-test.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># d为数据向量</span></span>
+<span id="cb12-2"><a href="binom-test.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># q为分位数值</span></span>
+<span id="cb12-3"><a href="binom-test.html#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># p为多少分位数</span></span>
+<span id="cb12-4"><a href="binom-test.html#cb12-4" aria-hidden="true" tabindex="-1"></a>quantile.test <span class="ot">&lt;-</span> <span class="cf">function</span>(d, q, p, <span class="at">alternative =</span> <span class="fu">c</span>(<span class="st">&quot;two.sided&quot;</span>, <span class="st">&quot;less&quot;</span>, </span>
+<span id="cb12-5"><a href="binom-test.html#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;greater&quot;</span>)){</span>
+<span id="cb12-6"><a href="binom-test.html#cb12-6" aria-hidden="true" tabindex="-1"></a>      len <span class="ot">&lt;-</span> <span class="fu">length</span>(d)</span>
+<span id="cb12-7"><a href="binom-test.html#cb12-7" aria-hidden="true" tabindex="-1"></a>      t1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(d<span class="sc">&lt;=</span>q)  <span class="co"># 小于等于分位数值的个数</span></span>
+<span id="cb12-8"><a href="binom-test.html#cb12-8" aria-hidden="true" tabindex="-1"></a>      t2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(d<span class="sc">&lt;</span>q)  <span class="co"># 小于分位数值的个数</span></span>
+<span id="cb12-9"><a href="binom-test.html#cb12-9" aria-hidden="true" tabindex="-1"></a>      l <span class="ot">&lt;-</span> <span class="fu">pbinom</span>(<span class="at">q =</span> t1,<span class="at">size =</span> len,<span class="at">prob =</span> p)</span>
+<span id="cb12-10"><a href="binom-test.html#cb12-10" aria-hidden="true" tabindex="-1"></a>      r <span class="ot">&lt;-</span> <span class="fu">pbinom</span>(<span class="at">q =</span> t2,<span class="at">size =</span> len,<span class="at">prob =</span> p,<span class="at">lower.tail =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-11"><a href="binom-test.html#cb12-11" aria-hidden="true" tabindex="-1"></a>      PVAL <span class="ot">&lt;-</span> <span class="cf">switch</span>(alternative,</span>
+<span id="cb12-12"><a href="binom-test.html#cb12-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">less =</span> l,</span>
+<span id="cb12-13"><a href="binom-test.html#cb12-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">greater =</span> r,</span>
+<span id="cb12-14"><a href="binom-test.html#cb12-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">two.sided =</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">min</span>(l,r))</span>
+<span id="cb12-15"><a href="binom-test.html#cb12-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">p.value =</span> PVAL, <span class="at">alternative =</span> alternative))</span>
+<span id="cb12-16"><a href="binom-test.html#cb12-16" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="binom-test.html#cb13-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">70</span>,<span class="dv">92</span>,<span class="dv">73</span>,<span class="dv">60</span>,<span class="dv">81</span>,<span class="dv">63</span>,<span class="dv">92</span>,<span class="dv">68</span>,</span>
+<span id="cb13-2"><a href="binom-test.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dv">75</span>,<span class="dv">82</span>,<span class="dv">76</span>,<span class="dv">72</span>,<span class="dv">62</span>,<span class="dv">58</span>,<span class="dv">95</span>,<span class="dv">92</span></span>
+<span id="cb13-3"><a href="binom-test.html#cb13-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-4"><a href="binom-test.html#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile.test</span>(d,<span class="dv">72</span>,<span class="fl">0.75</span>,<span class="st">&quot;two.sided&quot;</span>)</span>
+<span id="cb13-5"><a href="binom-test.html#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $p.value</span></span>
+<span id="cb13-6"><a href="binom-test.html#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.00329</span></span>
+<span id="cb13-7"><a href="binom-test.html#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-8"><a href="binom-test.html#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $alternative</span></span>
+<span id="cb13-9"><a href="binom-test.html#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;two.sided&quot;</span></span></code></pre></div>
+<p>由于<span class="math inline">\(p\)</span>值小于0.05，故应当拒绝原假设。</p>
+</div>
+<div id="习题7" class="section level3" number="1.2.7">
+<h3><span class="header-section-number">1.2.7</span> 习题7</h3>
+<p>在某保险种类中，2011年的索赔数额（单位：万元）的随机样本为</p>
+<p>23.12, 23.64, 25.26, 27.42, 34.86, 37.98, 47.40,</p>
+<p>52.37, 58.42, 63.71, 73.80, 75.06, 93.60, 98.25</p>
+<p>已知2010年的索赔数额的中位数为48.32万元，试在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，检验2011年的索赔数额的中位数是否比上一年有所变化。</p>
+<p><strong>解：</strong></p>
+<p>中位数的双边检验问题，利用符号检验。</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="binom-test.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 载入数据</span></span>
+<span id="cb14-2"><a href="binom-test.html#cb14-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">23.12</span>, <span class="fl">23.64</span>, <span class="fl">25.26</span>, <span class="fl">27.42</span>, <span class="fl">34.86</span>, <span class="fl">37.98</span>, <span class="fl">47.40</span>,</span>
+<span id="cb14-3"><a href="binom-test.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fl">52.37</span>, <span class="fl">58.42</span>, <span class="fl">63.71</span>, <span class="fl">73.80</span>, <span class="fl">75.06</span>, <span class="fl">93.60</span>, <span class="fl">98.25</span>)</span>
+<span id="cb14-4"><a href="binom-test.html#cb14-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fl">48.32</span></span>
+<span id="cb14-5"><a href="binom-test.html#cb14-5" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="fu">sum</span>(d<span class="sc">&lt;</span>x) </span>
+<span id="cb14-6"><a href="binom-test.html#cb14-6" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="fu">sum</span>(d<span class="sc">&gt;</span>x) </span>
+<span id="cb14-7"><a href="binom-test.html#cb14-7" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="fu">sum</span>(d<span class="sc">==</span>x) </span>
+<span id="cb14-8"><a href="binom-test.html#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S1,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.5</span>,<span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>)</span>
+<span id="cb14-9"><a href="binom-test.html#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-10"><a href="binom-test.html#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb14-11"><a href="binom-test.html#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-12"><a href="binom-test.html#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S1 and S1 + S2</span></span>
+<span id="cb14-13"><a href="binom-test.html#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 7, number of trials = 14, p-value = 1</span></span>
+<span id="cb14-14"><a href="binom-test.html#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is not equal to 0.5</span></span>
+<span id="cb14-15"><a href="binom-test.html#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb14-16"><a href="binom-test.html#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.23 0.77</span></span>
+<span id="cb14-17"><a href="binom-test.html#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb14-18"><a href="binom-test.html#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb14-19"><a href="binom-test.html#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.5</span></span></code></pre></div>
+<p><span class="math inline">\(p\)</span>值巨大，可以认为原假设成立，即2011年的索赔数额的中位数比上一年没有显著变化。</p>
+</div>
+<div id="习题8" class="section level3" number="1.2.8">
+<h3><span class="header-section-number">1.2.8</span> 习题8</h3>
+<p>一个工人加工某零件的尺寸标准应该是10mm，顺序度量了20个加工后的零件之后，得到如下尺寸：</p>
+<p>9.9,8.8,11.3,10.3,10.0,10.5,11.6,9.4,11.9,9.4,</p>
+<p>9.5,11.7,12.2,9.6,12.8,9.8,10.7,10.9,11.3,10.7</p>
+<p>试在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，检验零件尺寸的中位数是否有大于10mm的可能？</p>
+<p><strong>解：</strong></p>
+<p>中位数检验问题：
+<span class="math display">\[
+M&gt;10\qquad v.s. \qquad M\le 10
+\]</span></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="binom-test.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 载入数据</span></span>
+<span id="cb15-2"><a href="binom-test.html#cb15-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">29.9</span>,<span class="fl">8.8</span>,<span class="fl">11.3</span>,<span class="fl">10.3</span>,<span class="fl">10.0</span>,<span class="fl">10.5</span>,<span class="fl">11.6</span>,<span class="fl">9.4</span>,<span class="fl">11.9</span>,<span class="fl">9.4</span>,</span>
+<span id="cb15-3"><a href="binom-test.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fl">9.5</span>,<span class="fl">11.7</span>,<span class="fl">12.2</span>,<span class="fl">9.6</span>,<span class="fl">12.8</span>,<span class="fl">9.8</span>,<span class="fl">10.7</span>,<span class="fl">10.9</span>,<span class="fl">11.3</span>,<span class="fl">10.7</span>)</span>
+<span id="cb15-4"><a href="binom-test.html#cb15-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb15-5"><a href="binom-test.html#cb15-5" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="fu">sum</span>(d<span class="sc">&lt;</span>x) </span>
+<span id="cb15-6"><a href="binom-test.html#cb15-6" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="fu">sum</span>(d<span class="sc">&gt;</span>x) </span>
+<span id="cb15-7"><a href="binom-test.html#cb15-7" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="fu">sum</span>(d<span class="sc">==</span>x) </span>
+<span id="cb15-8"><a href="binom-test.html#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S1,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.5</span>,<span class="at">alternative =</span> <span class="st">&quot;less&quot;</span>)</span>
+<span id="cb15-9"><a href="binom-test.html#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-10"><a href="binom-test.html#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb15-11"><a href="binom-test.html#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-12"><a href="binom-test.html#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S1 and S1 + S2</span></span>
+<span id="cb15-13"><a href="binom-test.html#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 6, number of trials = 19, p-value = 0.08</span></span>
+<span id="cb15-14"><a href="binom-test.html#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is less than 0.5</span></span>
+<span id="cb15-15"><a href="binom-test.html#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb15-16"><a href="binom-test.html#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.00 0.53</span></span>
+<span id="cb15-17"><a href="binom-test.html#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb15-18"><a href="binom-test.html#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb15-19"><a href="binom-test.html#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.316</span></span></code></pre></div>
+<p><span class="math inline">\(p\)</span>值大于0.05，应当接受原假设，即认为零件尺寸的中位数有大于10mm的可能。</p>
+</div>
+<div id="习题9" class="section level3" number="1.2.9">
+<h3><span class="header-section-number">1.2.9</span> 习题9</h3>
+<p>关顾某食品店的22名顾客品尝甲和乙两种点心并选出喜欢的品种。7名顾客喜欢甲品种，12顾客喜欢乙品种，3名顾客没有特别偏好。问在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，这能否说明顾客有明显偏好？</p>
+<p><strong>解：</strong></p>
+<p>成对数据的比较，利用两样本的符号检验：</p>
+<p><span class="math display">\[
+顾客没有明显偏好\qquad v.s. \qquad 顾客没有明显偏好
+\]</span></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="binom-test.html#cb16-1" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">=</span> <span class="dv">7</span>  <span class="co"># 喜欢甲品种</span></span>
+<span id="cb16-2"><a href="binom-test.html#cb16-2" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">=</span> <span class="dv">12</span> <span class="co"># 喜欢乙品种</span></span>
+<span id="cb16-3"><a href="binom-test.html#cb16-3" aria-hidden="true" tabindex="-1"></a>S0 <span class="ot">=</span> <span class="dv">3</span>  <span class="co"># 结点，不考虑</span></span>
+<span id="cb16-4"><a href="binom-test.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S1,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.5</span>,<span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>)</span>
+<span id="cb16-5"><a href="binom-test.html#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-6"><a href="binom-test.html#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb16-7"><a href="binom-test.html#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-8"><a href="binom-test.html#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S1 and S1 + S2</span></span>
+<span id="cb16-9"><a href="binom-test.html#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 7, number of trials = 19, p-value = 0.4</span></span>
+<span id="cb16-10"><a href="binom-test.html#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is not equal to 0.5</span></span>
+<span id="cb16-11"><a href="binom-test.html#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb16-12"><a href="binom-test.html#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.163 0.616</span></span>
+<span id="cb16-13"><a href="binom-test.html#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb16-14"><a href="binom-test.html#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb16-15"><a href="binom-test.html#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.368</span></span></code></pre></div>
+<p><span class="math inline">\(p\)</span>值大于0.05，故应当接受原假设，即认为顾客有明显偏好。</p>
+</div>
+<div id="习题10" class="section level3" number="1.2.10">
+<h3><span class="header-section-number">1.2.10</span> 习题10</h3>
+<p>某6位学生打算通过节食减肥，节食前后的体重（单位：kg）有如下结果：</p>
+<p>节食前体重：114,121,128,122,141,128</p>
+<p>节食后体重：105,126,123,118,143,121</p>
+<p>问在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，我们能否认为他们的减肥计划是成功的？</p>
+<p><strong>解：</strong></p>
+<p>成对数据的比较问题：
+<span class="math display">\[
+P^{-}&gt; P^{+}\qquad v.s. \qquad P^{-}\le P^{+}
+\]</span>
+即
+<span class="math display">\[
+P^{-}&gt; 0.5\qquad v.s. \qquad P^{-}\le 0.5
+\]</span></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="binom-test.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 载入数据</span></span>
+<span id="cb17-2"><a href="binom-test.html#cb17-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">114</span>,<span class="dv">121</span>,<span class="dv">128</span>,<span class="dv">122</span>,<span class="dv">141</span>,<span class="dv">128</span>)</span>
+<span id="cb17-3"><a href="binom-test.html#cb17-3" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">105</span>,<span class="dv">126</span>,<span class="dv">123</span>,<span class="dv">118</span>,<span class="dv">143</span>,<span class="dv">121</span>)</span>
+<span id="cb17-4"><a href="binom-test.html#cb17-4" aria-hidden="true" tabindex="-1"></a>S1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(d2<span class="sc">&lt;</span>d1)  <span class="co"># S-</span></span>
+<span id="cb17-5"><a href="binom-test.html#cb17-5" aria-hidden="true" tabindex="-1"></a>S2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(d2<span class="sc">&gt;</span>d1)  <span class="co"># S+</span></span>
+<span id="cb17-6"><a href="binom-test.html#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="at">x =</span> S1,<span class="at">n =</span> S1<span class="sc">+</span>S2,<span class="at">p =</span> <span class="fl">0.5</span>,<span class="at">alternative =</span> <span class="st">&quot;less&quot;</span>)</span>
+<span id="cb17-7"><a href="binom-test.html#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-8"><a href="binom-test.html#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Exact binomial test</span></span>
+<span id="cb17-9"><a href="binom-test.html#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-10"><a href="binom-test.html#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data:  S1 and S1 + S2</span></span>
+<span id="cb17-11"><a href="binom-test.html#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; number of successes = 4, number of trials = 6, p-value = 0.9</span></span>
+<span id="cb17-12"><a href="binom-test.html#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alternative hypothesis: true probability of success is less than 0.5</span></span>
+<span id="cb17-13"><a href="binom-test.html#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb17-14"><a href="binom-test.html#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.000 0.937</span></span>
+<span id="cb17-15"><a href="binom-test.html#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb17-16"><a href="binom-test.html#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
+<span id="cb17-17"><a href="binom-test.html#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.667</span></span></code></pre></div>
+<p><span class="math inline">\(p\)</span>值大于0.05，故我们应当接受原假设，即认为他们的减肥计划并不成功。</p>
 
+</div>
 </div>
 </div>
 <section style="
