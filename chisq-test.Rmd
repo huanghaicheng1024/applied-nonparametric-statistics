@@ -1,0 +1,43 @@
+# 列联分析 {#chisq-test}
+
+## 主要理论
+
+**对于二维列联表**：
+
+- 拟合优度检验：样本是从总体的不同类别中分别抽取，研究不同类别的目标量之间是否存在显著性差异。
+
+- 独立性检验：两个变量间是否存在联系。
+
+两者都是利用Pearson $\chi^2$统计量，在R中使用函数`chisq.test`。
+```{r eval=FALSE}
+chisq.test(x, y = NULL, correct = TRUE,
+           p = rep(1/length(x), length(x)), rescale.p = FALSE,
+           simulate.p.value = FALSE, B = 2000)
+```
+
+用法参考：https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/chisq.test 。主要用法为将列联表矩阵赋予参数`x`。
+
+使用注意：
+
+要求样本量必须足够大，特别是每个单元中的期望频数不能过小。一般需要满足两个准则：
+
+- 如果只有两个单元，每个单元的期望频数必须大于等于5.在2x2列联表中，有一个期望值小于5且样本量小于40，或几个期望值小于5，或有一个期望值小于1，均不宜作$\chi^2$检验。
+
+- 有两个以上的单元，20%的单元期望频数小于5，不能应用$\chi^2$检验。
+
+**对于三维列联表**：
+
+- 独立性检验：建立对数线性模型。
+
+利用`MASS`包的`loglin()`函数，用法详见：https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/loglin 。主要用法为：
+```{r eval=FALSE}
+# a为一个三维数组
+loglin(a,list(1,2,3))  # 检验X Y Z独立性
+loglin(a,list(1,c(2,3))) # 检验X与（Y Z）独立性
+loglin(a,list(c(1,2),c(1,3))) # 检验(X Y)(X Z)独立性，即给定X检验Y Z独立性
+```
+
+并且可以计算Pearson统计量以及LRT统计量，当值较大时拒绝原假设（独立）。
+
+
+
