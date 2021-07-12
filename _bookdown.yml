@@ -14,3 +14,9 @@ language:
     chapter_name: ""
 
 before_chapter_script: "_common.R"
+
+rmd_files: [
+  "index.Rmd",
+  "binom-test.Rmd",
+  "chisq-test.Rmd",
+]
