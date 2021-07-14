@@ -24,7 +24,7 @@
 <meta name="author" content="Huang" />
 
 
-<meta name="date" content="2021-07-11" />
+<meta name="date" content="2021-07-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="index.html"/>
-
+<link rel="next" href="chisq-test.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -137,7 +137,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="binom-test.html"><a href="binom-test.html"><i class="fa fa-check"></i><b>1</b> 基于二项分布的检验</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="binom-test.html"><a href="binom-test.html#主要理论"><i class="fa fa-check"></i><b>1.1</b> 主要理论</a></li>
-<li class="chapter" data-level="1.2" data-path="binom-test.html"><a href="binom-test.html#习题"><i class="fa fa-check"></i><b>1.2</b> 习题</a></li>
+<li class="chapter" data-level="1.2" data-path="binom-test.html"><a href="binom-test.html#习题3"><i class="fa fa-check"></i><b>1.2</b> 习题3</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="chisq-test.html"><a href="chisq-test.html"><i class="fa fa-check"></i><b>2</b> 列联分析</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="chisq-test.html"><a href="chisq-test.html#主要理论-1"><i class="fa fa-check"></i><b>2.1</b> 主要理论</a></li>
+<li class="chapter" data-level="2.2" data-path="chisq-test.html"><a href="chisq-test.html#习题4"><i class="fa fa-check"></i><b>2.2</b> 习题4</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://bookdown.org" target="blank">本书由 bookdown 强力驱动</a></li>
@@ -189,10 +194,10 @@ H_0:\ p=p_0\qquad v.s. \qquad H_1:\ ?
 <span id="cb1-14"><a href="binom-test.html#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $conf.level</span></span>
 <span id="cb1-15"><a href="binom-test.html#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.95</span></span></code></pre></div>
 </div>
-<div id="习题" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> 习题</h2>
-<div id="习题1" class="section level3" number="1.2.1">
-<h3><span class="header-section-number">1.2.1</span> 习题1</h3>
+<div id="习题3" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> 习题3</h2>
+<div id="section" class="section level3 unnumbered">
+<h3>3.1</h3>
 <p>已知某中昆虫的20%显示出特性A，在非正常的环境下得到18条昆虫，其中没有一条具有特性A。那么假设在这种环境下，此种昆虫和通常环境一样有0.2的概率显示特性A，这合理吗？取显著性水平<span class="math inline">\(\alpha=0.05\)</span>，用双边检验。</p>
 <p><strong>解：</strong></p>
 <p>基于二项分布的检验问题：
@@ -214,8 +219,8 @@ p=0.2\qquad v.s.\qquad p\ne0.2
 <span id="cb2-12"><a href="binom-test.html#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                      0</span></span></code></pre></div>
 <p>p值小于0.05，故应当拒绝原假设，即假设在这种环境下，此种昆虫和通常环境一样有0.2的概率显示特性A，这不合理。</p>
 </div>
-<div id="习题2" class="section level3" number="1.2.2">
-<h3><span class="header-section-number">1.2.2</span> 习题2</h3>
+<div id="section-1" class="section level3 unnumbered">
+<h3>3.2</h3>
 <p>在一次安全月活动中，所检验的16辆车中有6辆是不安全的。试在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，检验原假设：这些车中有不多于10%的车是安全的。</p>
 <p><strong>解：</strong></p>
 <p>设<span class="math inline">\(p\)</span>是车辆不安全的概率，有基于二项分布的检验问题：
@@ -237,8 +242,8 @@ p\le0.1 \qquad v.s. \qquad p&gt;0.1
 <span id="cb3-12"><a href="binom-test.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.375</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值小于0.05，应当拒绝原假设。</p>
 </div>
-<div id="习题3" class="section level3" number="1.2.3">
-<h3><span class="header-section-number">1.2.3</span> 习题3</h3>
+<div id="section-2" class="section level3 unnumbered">
+<h3>3.3</h3>
 <p>某一居民小区向市政府报告说，至少有60%的居民认同小区改造建设。市政府随后就随机调查了100个居民，其中48人同意这种小区改造建设。问在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，检验这个居民小区的报告是否合理。</p>
 <p><strong>解：</strong></p>
 <p>同意小区改造假设的居民人数服从二项分布，<span class="math inline">\(p\)</span>为同意的概率。检验问题：
@@ -260,8 +265,8 @@ p \ge 0.6 \qquad v.s. \qquad p&lt;0.6
 <span id="cb4-12"><a href="binom-test.html#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                   0.48</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值小于0.05，故应当拒绝原假设，即认为这个居民小区的报告不合理。</p>
 </div>
-<div id="习题4" class="section level3" number="1.2.4">
-<h3><span class="header-section-number">1.2.4</span> 习题4</h3>
+<div id="section-3" class="section level3 unnumbered">
+<h3>3.4</h3>
 <p>据估计，目前做前列腺手术的男性中有一半正遭受某种副作用的影响。为了努力减轻这种副作用的可能性，FDA研究了一种新的手术方法。19例受手术者只有3人有这种不良副作用，由此得出这项新手术方法能有效减轻副作用，这个结论可靠吗？取显著性水平<span class="math inline">\(\alpha=0.05\)</span>。</p>
 <p><strong>解：</strong></p>
 <p>有不良副作用的受手术者人数服从二项分布，<span class="math inline">\(p\)</span>为有不良副作用的概率，为了保护原假设，检验问题：
@@ -283,8 +288,8 @@ p\ge0.5\qquad v.s. \qquad p&lt;0.5
 <span id="cb5-12"><a href="binom-test.html#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.158</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值小于0.05，即可以认为结论可靠。</p>
 </div>
-<div id="习题5" class="section level3" number="1.2.5">
-<h3><span class="header-section-number">1.2.5</span> 习题5</h3>
+<div id="section-4" class="section level3 unnumbered">
+<h3>3.5</h3>
 <p>某学校初中三年级学生的体重的随机样本有如下20个数据（单位：kg）：</p>
 <p>71, 67, 49, 59.5, 65.5, 51.5, 77, 61, 46.5, 68.5,</p>
 <p>43, 59.5, 80.5, 77, 79, 82.5, 40.5, 58.5, 64, 51.5.</p>
@@ -363,8 +368,8 @@ H_0:\ p_0\ge0.3\qquad v.s. \qquad H_1:\ p_0&lt;0.3
 <span id="cb11-12"><a href="binom-test.html#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.1</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值小于<span class="math inline">\(0.05\)</span>，应当拒绝假设（3）.</p>
 </div>
-<div id="习题6" class="section level3" number="1.2.6">
-<h3><span class="header-section-number">1.2.6</span> 习题6</h3>
+<div id="section-5" class="section level3 unnumbered">
+<h3>3.6</h3>
 <p>大学新生入学后需要参加一个特殊的高中学业考试，多年以来成绩的上四分位数是72.某高中有16名毕业生上了大学，他们参加了考试，得分如下：</p>
 <p>70,92,73,60,81,63,92,68,</p>
 <p>75,82,76,72,62,58,95,92</p>
@@ -402,8 +407,8 @@ X的75\%分位数为72\quad v.s. \quad X的75\%分位数不是72
 <span id="cb13-9"><a href="binom-test.html#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;two.sided&quot;</span></span></code></pre></div>
 <p>由于<span class="math inline">\(p\)</span>值小于0.05，故应当拒绝原假设。</p>
 </div>
-<div id="习题7" class="section level3" number="1.2.7">
-<h3><span class="header-section-number">1.2.7</span> 习题7</h3>
+<div id="section-6" class="section level3 unnumbered">
+<h3>3.7</h3>
 <p>在某保险种类中，2011年的索赔数额（单位：万元）的随机样本为</p>
 <p>23.12, 23.64, 25.26, 27.42, 34.86, 37.98, 47.40,</p>
 <p>52.37, 58.42, 63.71, 73.80, 75.06, 93.60, 98.25</p>
@@ -431,8 +436,8 @@ X的75\%分位数为72\quad v.s. \quad X的75\%分位数不是72
 <span id="cb14-19"><a href="binom-test.html#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.5</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值巨大，可以认为原假设成立，即2011年的索赔数额的中位数比上一年没有显著变化。</p>
 </div>
-<div id="习题8" class="section level3" number="1.2.8">
-<h3><span class="header-section-number">1.2.8</span> 习题8</h3>
+<div id="section-7" class="section level3 unnumbered">
+<h3>3.8</h3>
 <p>一个工人加工某零件的尺寸标准应该是10mm，顺序度量了20个加工后的零件之后，得到如下尺寸：</p>
 <p>9.9,8.8,11.3,10.3,10.0,10.5,11.6,9.4,11.9,9.4,</p>
 <p>9.5,11.7,12.2,9.6,12.8,9.8,10.7,10.9,11.3,10.7</p>
@@ -463,8 +468,8 @@ M&gt;10\qquad v.s. \qquad M\le 10
 <span id="cb15-19"><a href="binom-test.html#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.316</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值大于0.05，应当接受原假设，即认为零件尺寸的中位数有大于10mm的可能。</p>
 </div>
-<div id="习题9" class="section level3" number="1.2.9">
-<h3><span class="header-section-number">1.2.9</span> 习题9</h3>
+<div id="section-8" class="section level3 unnumbered">
+<h3>3.9</h3>
 <p>关顾某食品店的22名顾客品尝甲和乙两种点心并选出喜欢的品种。7名顾客喜欢甲品种，12顾客喜欢乙品种，3名顾客没有特别偏好。问在显著性水平<span class="math inline">\(\alpha=0.05\)</span>下，这能否说明顾客有明显偏好？</p>
 <p><strong>解：</strong></p>
 <p>成对数据的比较，利用两样本的符号检验：</p>
@@ -488,8 +493,8 @@ M&gt;10\qquad v.s. \qquad M\le 10
 <span id="cb16-15"><a href="binom-test.html#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0.368</span></span></code></pre></div>
 <p><span class="math inline">\(p\)</span>值大于0.05，故应当接受原假设，即认为顾客有明显偏好。</p>
 </div>
-<div id="习题10" class="section level3" number="1.2.10">
-<h3><span class="header-section-number">1.2.10</span> 习题10</h3>
+<div id="section-9" class="section level3 unnumbered">
+<h3>3.10</h3>
 <p>某6位学生打算通过节食减肥，节食前后的体重（单位：kg）有如下结果：</p>
 <p>节食前体重：114,121,128,122,141,128</p>
 <p>节食后体重：105,126,123,118,143,121</p>
@@ -541,8 +546,8 @@ P^{-}&gt; 0.5\qquad v.s. \qquad P^{-}\le 0.5
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chisq-test.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -564,7 +569,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/huanghaicheng1024/applied-nonparametric-statistics/edit/main/01-binom-test.Rmd",
+"link": "https://github.com/huanghaicheng1024/applied-nonparametric-statistics/edit/main/binom-test.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -577,7 +582,7 @@ gitbook.start({
 },
 "download": null,
 "toc": {
-"collapse": "none"
+"collapse": "subsection"
 },
 "search": false
 });
