@@ -19,4 +19,5 @@ rmd_files: [
   "index.Rmd",
   "binom-test.Rmd",
   "chisq-test.Rmd",
+  "rank-test.Rmd"
 ]
