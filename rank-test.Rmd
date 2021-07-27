@@ -1,0 +1,874 @@
+# 秩检验 {#rank-test}
+
+## 主要理论
+
+- 线性秩统计量：定义、基本性质
+
+- 符号秩统计量：定义、基本性质，Wilcoxon符号秩检验（对称中心检验、成对数据检验）`wilcox.test(paired = TRUE)`
+
+- 位置参数的检验：Wilcoxon秩和检验`wilcox.test(paired = FALSE)`，Mann-Witney检验（统计量与Wilcoxon秩和统计量等价）
+
+- 尺度参数的检验：Mood检验`mood.test`、平方秩检验
+
+- 多个独立样本问题：Kruskal-Waillis检验`kruskal.test`、Dunn检验`DunnTest`（`DescTools`包，当Kruskal-Waillis检验拒绝原假设）、Jonckheere-Terpstra检验`JonckheereTerpstraTest`（`DescTools`包）、
+
+- 区组设计：Friedman检验`friedman.test`、Page检验、Cochran检验、Duribn检验`durbin.test`（`PMCMRplus`包）
+
+- 相关分析：Spearman秩相关分析、Kendall $\tau$ 相关检验`cor.test`、多变量Kendall协同系数检验`KendallW`（`DescTools`包）
+
+- 线性回归的非参数方法`cor.test`
+
+
+## 函数实现
+
+将上述提到的平方秩检验，Page检验，Cochran检验进行编码实现。
+
+### 平方秩检验
+
+```{r}
+# 平方秩检验
+# 输入：
+# x,y:两总体样本向量
+# alternative:备择假设方向
+square_rank.test <- function(x, y, alternative = c("two.sided", "less", "greater"))
+{
+  if(!is.vector(x)||!is.vector(y)){
+    stop("'x' and 'y' must be vector")
+  }
+  n1 <- length(x); n2 <- length(y); n <- n1+n2;
+  mx <-  mean(x); my <-  mean(y);
+  U <- abs(x-mx); V <- abs(y-my); # 绝对离差
+  r <- rank(c(U,V),ties.method = "average") # 混合离差秩
+  T <- sum(r[1:n1]^2)  # 相应于U的秩平方和
+  z <- (T-n2*(n+1)*(2*n+1)/6)/sqrt(n1*n2*(n+1)*(2*n+1)*(8*n+11)/180)
+  pl <- pnorm(z)
+  pr <- pnorm(z,lower.tail = FALSE)
+  Twarning <- (n1<=10|n2<=10)  # 样本数过小的提醒
+  s <- ""
+  # 如果打结
+  if(length(unique(r))!=n){
+    mrs <- mean(r^2)
+    s2 <- n1*n2*sum(r^4)/(n*(n-1))-n1*n2*mrs^2/(n-1)
+    T <- (T-n1*mrs)/sqrt(s2)  # 调整T
+    pl <- pnorm(T)
+    pr <- pnorm(T,lower.tail = FALSE)
+    Twarning <- FALSE
+    s <- "(with ties)"
+  }
+  # p值
+  PVAL <- switch(alternative, less = pl, greater = pr, two.sided = 2*min(pl,pr))
+  names(T) <- "square rank test statistic"
+  names(n1) <- "the number of x"
+  names(n2) <- "the number of y"
+  names(n) <- "the number of x and y"
+  l <- list(statistic = T, 
+            parameter = c(n1,n2,n), 
+            p.value = PVAL, alternative = alternative, 
+            method = paste("Square rank test",s),
+            data.name = paste(deparse(substitute(x)),"and",deparse(substitute(y))))
+  if(Twarning){
+    warning("The sizes of x and y are less than 10. The test may be inaccurate.")
+  } 
+  structure(l, class = "htest")
+}
+```
+
+测试一下：
+
+```{r}
+x <- c(74,75,76,79,82,65,86,58)
+y <- c(72,73,69,74,68,75,67,76,66)
+square_rank.test(x,y,alternative = "two.sided")
+```
+
+
+### Page检验
+
+备择假设为单调趋势。
+
+```{r}
+# page检验
+# 输入：
+# x:区组设计矩阵，行处理，列区组
+# alternative:备择假设，up为单调上升，down为单调下降
+page.test <- function(x, alternative = c("increasing","decreasing"))
+{
+  if(!is.matrix(x)){
+    stop("'x' must be matrix")
+  }
+  k <- nrow(x)  # 行数，处理
+  b <- ncol(x)  # 列数，区组
+  r <- apply(x, 2, rank) # 按列求秩
+  R <- apply(r,1,sum) # 按行求和
+  L <- sum((1:k)*R)  # Page检验统计量
+  # 求标准差
+  t <- unlist(apply(x,2,table))
+  g <- sum(t^3-t) # 打结修正量
+  sigma2 <- k*(k+1)*(b*k*(k^2-1)-g)/144
+  z <- (L-b*k*(k+1)^2/4)/sqrt(sigma2)
+  # p值
+  PVAL <- switch(alternative, increasing = pnorm(z,lower.tail = FALSE), 
+                 decreasing = pnorm(z))
+  
+  names(L) <- "Page test statistic"
+  l <- list(statistic = L, 
+            parameter = list(blocks=b,treatments=k), 
+            p.value = PVAL, alternative = alternative, 
+            method = "Page test",
+            data.name = paste(deparse(substitute(x))))
+  structure(l, class = "htest")
+}
+```
+
+
+
+### Cochran检验
+
+只取二元数据的完全区组设计的假设检验问题。
+
+```{r}
+# Cochran检验
+# 输入：x为bool矩阵，行为处理
+cochran.test <- function(x)
+{
+  if(!is.matrix(x)||!is.logical(x)){
+    stop("'x' must be a logical matrix")
+  }
+  k <- nrow(x)  # 行数，处理
+  b <- ncol(x)  # 列数，区组
+  Ni <- apply(x, 1, sum)  # 行和
+  Lj <- apply(x, 2, sum)  # 列和
+  N <- sum(x)  # 总和
+  Q <- (k*(k-1)^2*var(Ni))/(k*N-sum(Lj^2))  # 检验统计量
+  # p值
+  PVAL <- pchisq(Q,k-1,lower.tail = FALSE)
+  names(Q) <- "Cochran test statistic"
+  l <- list(statistic = Q, 
+            parameter = list(df=k-1,blocks=b,treatments=k), 
+            p.value = PVAL, 
+            method = "Cochran test",
+            data.name = deparse(substitute(x)))
+  structure(l, class = "htest")
+}
+```
+
+
+## 函数测试
+
+对课本上的一些例子使用上述函数进行测试。先载入相关包：
+```{r}
+library(DescTools)
+library(PMCMRplus)
+```
+
+
+### 例5.2.2{-}
+
+Wilcoxon符号秩检验：
+```{r}
+x <- c(34.3,35.8,35.4,34.8,35.2,35.1,35.0,35.5)-35
+wilcox.test(x,alternative = "greater",mu=0,exact = FALSE)
+```
+
+### 例5.2.3{-}
+
+Wilcoxon符号秩检验：
+```{r}
+x <- c(42,51,31,61,44,55,48)
+y <- c(38,53,36,52,33,49,36)
+wilcox.test(x,y,mu = 0,alternative = "greater",paired = TRUE)
+```
+
+### 例5.3.1{-}
+
+Wilcoxon秩和检验：
+```{r}
+x <- c(1.20,1.63,2.26,1.87,2.20,1.30)
+y <- c(0.94,1.26,1.15)
+wilcox.test(x,y,mu = 0,alternative = "greater",paired = FALSE)
+```
+
+### 例5.4.1{-}
+
+Mood检验：
+```{r}
+x <- c(4.5,6.5,7.0,10.0,12.0)
+y <- c(6.0,7.2,8.0,9.0,9.8)
+mood.test(x,y,alternative = "two.sided")
+```
+
+### 例5.4.2{-}
+
+平方秩检验：
+```{r}
+x <- c(74,74,76,79,82,65,86,58)
+y <- c(72,73,69,74,68,75,67,76,66)
+square_rank.test(x,y,alternative = "two.sided")
+```
+
+### 例5.5.1{-}
+
+kruskal检验：
+```{r}
+A <- c(73,64,67,62,70)
+B <- c(84,80,81,77)
+C <- c(82,79,71,75)
+x <- list(A,B,C)
+kruskal.test(x)
+```
+这里课本的$p$值好像有误。
+
+Dunn检验进行两两比较：
+```{r}
+DunnTest(x)
+```
+
+
+### 例5.5.2{-}
+
+Jonckheere-Terpstra检验：
+```{r error=TRUE}
+# 先构建列表
+A <- c(260,200,240,170,270,205,190,200,250,200)
+B <- c(310,310,190,225,170,210,280,210,280,240)
+C <- c(225,260,360,310,270,380,240,295,260,250)
+x <- list(A,B,C)
+JonckheereTerpstraTest(x,alternative = "increasing")
+```
+
+不知道为什么会报错，查了一下源代码，原因是当参数只给`x`作为一个列表时，会自动计算`g`，但是计算出来的`g`的一个无序的`factor`，下面的运算都需要`g`是一个有序的`factor`，不知道是不是代码的问题。
+
+现手动计算`g`传入参数：
+```{r}
+k <- length(x)
+l <- sapply(x,length)
+g <-ordered(rep(1:k, l))
+x <- unlist(x)
+JonckheereTerpstraTest(x,g,alternative = "increasing")
+```
+
+
+### 例5.6.1{-}
+
+Friedman检验：
+```{r}
+# 先构建矩阵：行为区组，列为处理
+# 每个处理的数据
+A <- c(14,19,17,17,16,15,18,16)
+B <- c(23,25,22,21,24,26,26,22)
+C <- c(26,25,29,28,28,27,27,30)
+D <- c(30,33,28,27,32,26,36,32)
+y <- matrix(c(A,B,C,D),ncol = 4)
+y
+```
+```{r}
+friedman.test(y)
+```
+
+### 例5.6.2{-}
+
+Page检验：
+```{r}
+x <- c(40,52,80,52,76,100,34,52,51,35,53,65)
+x <- matrix(x,3,4)
+page.test(x,alternative = "increasing")
+```
+
+### 例5.6.3{-}
+
+Cochran检验：
+```{r}
+x1 <- c(rep(1,8),0,rep(1,5),0)
+x2 <- c(1,rep(0,3),1,1,0,1,0,0,0,rep(1,4))
+x3 <- c(0,0,0,1,rep(0,7),1,0,0,0)
+x <- matrix(as.logical(c(x1,x2,x3)),3,15,byrow = TRUE)
+cochran.test(x)
+```
+
+### 例5.6.4{-}
+
+Durbin检验：
+```{r}
+# 先构建矩阵，无实验数据用NA表示
+A <- c(3.5,2.9,3.7,NA)
+B <- c(3.7,3.1,NA,4.4)
+C <- c(4.1,NA,4.9,5.8)
+D <- c(NA,4.5,5.7,5.9)
+x <- matrix(c(A,B,C,D),ncol = 4)
+durbinTest(x)
+```
+
+### 例5.7.1{-}
+
+Spearman秩相关检验：
+```{r}
+x <- c(452,318,310,409,405,332,497,321,406,413,334,467)
+y <- c(107,147,151,120,123,135,100,143,117,118,141,100)
+cor.test(x,y,alternative = "two.sided",method = "spearman",exact = F)
+```
+
+### 例5.7.2{-}
+
+Kendall $\tau$相关检验：
+```{r}
+x <- c(86,78,65,88,90,90,80,77,76,68,85,70)
+y <- c(71,69,62,78,82,75,73,65,66,60,70,61)
+cor.test(x,y,alternative = "two.sided",method = "kendall",exact = F)
+```
+？？？$p$值又跟书本不同。
+
+### 例5.7.3{-}
+
+Kendall协同系数检验：
+```{r}
+# 先构建矩阵，列为评分机构
+A <- c(12,9,2,4,10,7,11,6,8,5,3,1)
+B <- c(10,1,3,12,8,7,5,9,6,11,4,2)
+C <- c(11,8,4,12,2,10,9,7,5,6,3,1)
+D <- c(9,1,2,10,12,6,7,4,8,5,11,3)
+x <- matrix(c(A,B,C,D),ncol = 4)
+KendallW(x,test = TRUE,correct = TRUE)
+```
+
+
+## 习题5
+
+### 5.2{-}
+
+**解：**
+
+对称中心检验问题：
+$$
+\theta=320 \qquad v.s. \qquad \theta>320
+$$
+
+```{r}
+# 载入数据
+x <- c(310,350,370,375,385,400,415,425,440,295,
+          325,295,250,340,295,365,375,360,385)
+wilcox.test(x,alternative = "greater",mu = 320,exact = FALSE)
+```
+
+$p$值小于0.05，应当拒绝原假设。
+
+### 5.3{-}
+
+**解：**
+
+对称中心检验问题：
+$$
+\theta=10 \qquad v.s. \qquad \theta\ne 10
+$$
+
+（1）符号检验：
+```{r}
+d <- c(22,9,4,5,1,16,15,26,47,8,31,7)
+x <- 10
+S1 = sum(d<x) 
+S2 = sum(d>x) 
+S0 = sum(d==x) 
+binom.test(x = S1,n = S1+S2,p = 0.5,alternative = "two.sided")
+```
+
+$p$值巨大，应当接受原假设。
+
+（2）Wilcoxon符号秩检验：
+```{r}
+wilcox.test(d,alternative = "two.sided",mu = x,exact = FALSE)
+```
+
+$p$值大于0.05也是接受原假设，但$p$值相对于符号检验要小很多。
+
+### 5.4{-}
+
+**解：**
+
+成对数据的检验，采用Wilcoxon符号秩检验。
+$$
+E(D)=0\qquad v.s. \qquad E(D)\ne 0
+$$
+
+```{r}
+x <- c(78,70,67,81,76,72,85,83)
+y <- c(62,58,63,77,80,73,82,78)
+w <- wilcox.test(x,y,mu = 0,alternative = "two.sided",paired = TRUE)
+w
+```
+
+有打结：
+```{r}
+t <- table(rank(abs(x-y)))
+t[t>1]
+```
+
+只有1个结，长度为3.本来写好了一个函数用于修正统计量，但是扒了源代码发现关于打结的修正依旧包含在函数中了，只是当样本数少于50或打结时会出现提醒.可以利用命令查看源代码：
+```{r eval=FALSE}
+stats:::wilcox.test.default
+```
+
+
+所以在显著性水平0.05下仍然接受原假设，即认为幼儿园生活对孩子的社会知识没有影响。
+
+### 5.5{-}
+
+**解：**
+
+成对数据的检验，采用Wilcoxon符号秩检验。
+$$
+E(D)=0\qquad v.s. \qquad E(D)\ne 0
+$$
+
+```{r}
+x <- c(1149,1152,1176,1149,1155,1169,1182,1160,1129,1171)
+y <- c(1116,1130,1184,1194,1184,1147,1125,1125,1166,1151)
+wilcox.test(x,y,alternative = "two.sided",mu = 0,paired = TRUE)
+```
+
+
+在显著性水平0.05下，接受原假设，即认为这段时间的股票指数的波动程度相同。
+
+### 5.6{-}
+
+**解：**
+
+位置参数的检验：
+$$
+\delta=0\qquad v.s\qquad \delta\ne 0
+$$
+
+采用Wilcoxon秩和检验：
+```{r}
+x <- c(134,146,104,119,124,161,112,83,113,129,97,123)
+y <- c(70,118,101,85,107,132,94)
+wilcox.test(x,y,alternative = "two.sided",mu = 0,paired = FALSE)  # paired = FALSE
+```
+
+在显著性水平0.05下应当接受原假设，即认为两种饲料对雌鼠的体重增加的影响不显著。
+
+### 5.7{-}
+
+**解：**
+
+位置参数的检验：
+$$
+\delta=0\qquad v.s\qquad \delta\ne 0
+$$
+
+采用Wilcoxon秩和检验：
+```{r}
+x <- c(52,49,54,47,56,55,45,57,55,54)
+y <- c(49,48,39,44,40,50,36,41)
+wilcox.test(x,y,alternative = "two.sided",mu = 0,paired = FALSE)
+```
+
+在显著性水平0.05下应当拒绝原假设，即认为这两个厂产品的寿命不同。
+
+### 5.8{-}
+
+**解：**
+
+先载入数据：
+```{r}
+x <- c(56,105,63,88,72,112,96,93,65,105,94,87,64,65,68,87)
+y <- c(88,94,93,96,99,79,91,94,91,100,99,90,100,110,102,95)
+```
+
+
+1.成对数据的检验：
+```{r}
+wilcox.test(x,y,mu = 0,alternative = "two.sided",paired = TRUE)
+```
+
+2.位置参数的检验：
+```{r}
+wilcox.test(x,y,mu = 0,alternative = "two.sided",paired = FALSE)
+```
+
+3.尺度参数的检验：
+```{r}
+mood.test(x,y,alternative = "two.sided")
+```
+
+```{r}
+square_rank.test(x,y,alternative = "two.sided")
+```
+
+综上，可以看到在显著性水平0.05下，应当认为两个学科的博士论文页数有显著差异，人均页数显著不同，页数离散程度显著不同。
+
+### 5.9{-}
+
+**解：**
+
+先载入数据：
+```{r}
+x <- c(83,79,83,74,75,74,86,76,84,73,78,77,80,83,78)
+y <- c(75,62,58,89,77,81,27,85,72,85,74,100,43,52,75)
+```
+
+
+1.成对数据的检验：
+```{r}
+wilcox.test(x,y,mu = 0,alternative = "two.sided",paired = TRUE)
+```
+
+2.位置参数的检验：
+```{r}
+wilcox.test(x,y,mu = 0,alternative = "two.sided",paired = FALSE)
+```
+
+3.尺度参数的检验：
+```{r}
+mood.test(x,y,alternative = "two.sided")
+```
+
+```{r}
+square_rank.test(x,y,alternative = "two.sided")
+```
+
+综上，可以看到在显著性水平0.05下，应当认为两个学校的学生成绩没有显著差异，平均成绩没有显著不同，离散程度有显著不同。
+
+### 5.10{-}
+
+**解：**
+
+可以考虑尺度参数的双边检验，方差比较低说明加工精度比较高。
+```{r}
+x <- c(18.0,17.1,16.4,16.9,16.9,16.7,16.7,17.2,17.5,16.9)
+y <- c(17.0,16.9,17.0,16.9,17.2,17.1,16.8,17.1,17.1,16.2)
+```
+
+Mood检验：
+```{r}
+mood.test(x,y,alternative = "two.sided")
+```
+
+平方秩检验：
+```{r}
+square_rank.test(x,y,alternative = "two.sided")
+```
+
+$p$值都大于0.05，应当接受原假设，即认为他们的水平（加工精度）一致。
+
+### 5.11{-}
+
+**解：**
+
+尺度参数的双边检验。
+```{r}
+x <- c(8.8,8.2,5.6,4.9,8.9,4.2,3.6,7.1,5.5,8.6,6.3,3.9)
+y <- c(13.0,14.5,22.8,20.7,19.6,18.4,21.3,24.2,19.6,11.7)
+```
+
+Mood检验：
+```{r}
+mood.test(x,y,alternative = "two.sided")
+```
+
+平方秩检验：
+```{r}
+square_rank.test(x,y,alternative = "two.sided")
+```
+
+在显著性水平0.05下，mood检验表示应当接受原假设，而平方秩检验表示应当拒绝原假设。
+
+但是mood检验需要要求两总体位置参数相等，利用位置参数的检验：
+```{r}
+wilcox.test(x,y,alternative = "two.sided",mu = 0,paired = FALSE)
+```
+
+$p$值很小，应当拒绝原假设，即认为两总体的位置参数不等。为了使用mood检验，我们需要估计两总体位置参数，进而平移使他们相等。
+```{r}
+# 平移两组样本
+x1 <- x-mean(x)
+y1 <- y-mean(y)
+# 再进行mood检验
+mood.test(x1,y1,alternative = "two.sided")
+```
+
+$p$值小于0.05，应当拒绝原假设。综上，应当认为两组数据的方差存在差异。
+
+### 5.12{-}
+
+**解：**
+
+尺度参数的双边检验。
+
+```{r}
+x <- c(8.2,10.7,7.5,14.6,6.3,9.2,11.9,5.6,12.8,5.2,4.9,13.5)
+y <- c(4.7,6.3,5.2,6.8,5.6,4.2,6.0,7.4,8.1,6.5)
+```
+
+先进行位置参数的检验：
+```{r}
+wilcox.test(x,y,alternative = "two.sided",mu = 0,paired = FALSE)
+```
+
+应当拒绝原假设，即认为他们的位置参数不相等。平移数据后再进行mood检验：
+```{r}
+# 平移两组样本
+x1 <- x-mean(x)
+y1 <- y-mean(y)
+# 再进行mood检验
+mood.test(x1,y1,alternative = "two.sided")
+```
+
+平方秩检验：
+```{r}
+square_rank.test(x,y,alternative = "two.sided")
+```
+
+两个检验都表明应当拒绝原假设，即认为他们的尿酸浓度变异不相同。
+
+### 5.13{-}
+
+**解：**
+
+关于位置参数的多样本双边检验问题。
+
+```{r}
+A <- c(80,203,236,252,284,368,457,393)
+B <- c(133,180,100,160)
+C <- c(156,295,320,448,465,481,279)
+D <- c(194,214,272,330,386,475)
+x <- list(A,B,C,D)
+```
+
+Kruskal-Waillis检验：
+```{r}
+kruskal.test(x)
+```
+
+在显著性水平0.05下应当拒绝原假设，即认为这四种药物的治疗效果不同。
+
+### 5.14{-}
+
+**解：**
+
+关于位置参数的多样本双边检验问题。
+
+```{r}
+A <- c(830,910,940,890,890,960,910,920,900)
+B <- c(910,900,810,830,840,830,880,910,890,840)
+C <- c(1010,1000,910,930,960,950,940)
+D <- c(780,820,810,770,790,810,800,810)
+x <- list(A,B,C,D)
+kruskal.test(x)
+```
+
+$p$值很小，应当拒绝原假设，即认为每种培育方法的水稻产量不相同。为了比较任意两种方法的水稻产量之间的差异，需要用的Dunn检验：
+```{r}
+DunnTest(x)
+```
+
+在显著性水平0.05下，方法4跟方法1、方法3跟方法2、方法4跟方法3的水稻产量有显著差异。
+
+### 5.15{-}
+
+关于位置参数的多样本趋势性检验问题。
+
+采用Jonckheere-Terpstra检验：
+```{r error=FALSE}
+A <- c(125,136,116,101,105,109)
+B <- c(122,114,132,120,119,127)
+C <- c(128,142,128,134,135,132,140,129)
+x <- list(A,B,C)
+k <- length(x)
+l <- sapply(x,length)
+g <-ordered(rep(1:k, l))
+x <- unlist(x)
+JonckheereTerpstraTest(x,g)
+```
+
+$p$值小于显著性水平0.05，应当拒绝原假设，即认为结论可靠。
+
+### 5.16{-}
+
+**解：**
+
+关于位置参数的多样本趋势性检验问题。
+
+采用Jonckheere-Terpstra检验：
+```{r error=FALSE}
+A <- c(40,35,38,43,44,41)
+B <- c(38,40,47,44,40,42)
+C <- c(48,40,45,43,46,48,44)
+x <- list(A,B,C)
+k <- length(x)
+l <- sapply(x,length)
+g <-ordered(rep(1:k, l))
+x <- unlist(x)
+JonckheereTerpstraTest(x,g)
+```
+
+$p$值小于显著性水平0.05，应当拒绝原假设，即认为研究者的经验可靠。
+
+
+### 5.17{-}
+
+**解：**
+
+完全区组设计的Friedman检验：
+```{r}
+A <- c(73,75,67,61,69,79)
+B <- c(83,81,99,82,85,87)
+C <- c(73,60,73,77,68,74)
+D <- c(58,64,64,71,77,74)
+E <- c(77,75,73,59,85,82)
+y <- matrix(c(A,B,C,D,E),ncol = 5)
+friedman.test(y)
+```
+
+$p$值小于显著性水平0.05，应当拒绝原假设，即认为面积大小有差异。
+
+
+### 5.18{-}
+
+**解：**
+
+二元区组设计的Cochran检验：
+```{r}
+A <- c(rep(1,9),0)
+B <- c(1,1,0,1,0,1,0,0,1,1)
+C <- c(0,0,1,1,0,0,0,0,0,1)
+x <- as.logical(c(A,B,C))
+x <- matrix(x,nrow = 3,byrow = TRUE)
+cochran.test(x)
+```
+
+$p$ 值略小于显著性水平0.05，应当拒绝原假设，即认为顾客对这三种糕点的爱好并不相同。
+
+
+
+### 5.19{-}
+
+**解：**
+
+完全区组设计的Page检验，单调上升：
+```{r}
+x1 <- c(36,51,71,63,82,128)
+x2 <- c(62,91,40,51,33,81)
+x3 <- c(53,81,67,75,116,38)
+x4 <- c(105,63,49,65,107,33)
+x5 <- c(36,46,62,63,42,104)
+x6 <- c(118,65,126,96,122,112)
+x7 <- c(42,108,123,32,69,102)
+x8 <- c(51,63,55,86,41,121)
+x9 <- c(114,51,30,109,97,86)
+x <- matrix(c(x1,x2,x3,x4,x5,x6,x7,x8,x9),ncol=9)
+page.test(x,alternative = "increasing")
+```
+
+$p$值大于显著性水平0.05，应当接受原假设，即认为论断不正确。
+
+或者利用`DescTools`的`PageTest`函数：
+```{r}
+PageTest(t(x))
+```
+$p$值相差不大。
+
+### 5.20{-}
+
+**解：**
+
+平衡的不完全区组设计的Durbin检验：
+```{r}
+A <- c(73,74,NA,71)
+B <- c(NA,75,67,72)
+C <- c(74,75,68,NA)
+D <- c(75,NA,72,75)
+x <- matrix(c(A,B,C,D),ncol = 4)
+durbinTest(x)
+```
+
+$p$值大于显著性水平0.05，应当接受原假设，即认为四种饲料的品质无差别。
+
+### 5.21{-}
+
+**解：**
+
+相关分析：
+```{r}
+# 载入数据
+x <- c(65,89,67,66,89,85,84,73,88,80,86,75)
+y <- c(62,66,50,68,88,86,64,62,92,64,81,80)
+```
+
+三类相关检验：
+
+```{r}
+cor.test(x,y,alternative = "two.sided",method = "spearman",exact = F)
+```
+
+```{r}
+cor.test(x,y,alternative = "two.sided",method = "kendall",exact = F)
+```
+
+Spearman秩相关检验以及Kendall $\tau$ 检验都表明在显著性水平0.05下应当拒绝原假设，即认为两者具有相关关系。
+
+```{r}
+cor.test(x,y,alternative = "two.sided",method = "pearson")
+```
+$p$值小于显著性水平0.05，应当拒绝原假设，即应当认为两者具有线性相关关系。
+
+
+### 5.22{-}
+
+**解：**
+
+相关分析：
+```{r}
+# 载入数据
+x <- c(75,95,85,70,76,68,60,66,80,88)
+y <- c(2.62,2.91,2.94,2.11,2.17,1.98,2.04,2.20,2.65,2.69)
+```
+
+三类相关检验：
+
+```{r}
+cor.test(x,y,alternative = "two.sided",method = "spearman",exact = F)
+```
+
+```{r}
+cor.test(x,y,alternative = "two.sided",method = "kendall",exact = F)
+```
+
+Spearman秩相关检验以及Kendall $\tau$ 检验都表明在显著性水平0.05下应当拒绝原假设，即认为两者具有相关关系。
+
+```{r}
+cor.test(x,y,alternative = "two.sided",method = "pearson")
+```
+$p$值小于显著性水平0.05，应当拒绝原假设，即应当认为两者具有线性相关关系。
+
+
+### 5.23{-}
+
+**解：**
+
+Kendall协同系数检验：
+```{r}
+A <- c(9,2,4,10,7,6,8,5,3,1)
+B <- c(10,1,3,8,7,5,9,6,4,2)
+C <- c(8,4,2,10,9,7,5,6,3,1)
+D <- c(9,1,2,10,6,7,4,8,5,3)
+x <- matrix(c(A,B,C,D),ncol = 4)
+KendallW(x,test = TRUE,correct = TRUE)
+```
+
+$p$值很小，应当拒绝原假设，即认为这些排序产生较为一致的效果。
+
+### 5.24{-}
+
+**解：**
+
+线性相关分析：
+```{r}
+x <- c(58.8,61.4,71.3,74.4,76.7,70.7,57.5,46.4,39.1,48.5,70.0,70.1)
+y <- c(8.4,9.27,8.73,6.36,8.50,7.82,9.14,8.24,9.57,9.58,8.11,6.83)
+cor.test(x,y,alternative = "two.sided",method = "pearson")
+```
+
+$p$值小于显著性水平0.05，应当拒绝原假设，即认为两者存在线性关系。
+
+
+
+
