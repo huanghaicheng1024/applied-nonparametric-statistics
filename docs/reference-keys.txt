@@ -4,3 +4,11 @@ binom-test
 chisq-test
 主要理论-1
 习题4
+rank-test
+主要理论-2
+函数实现
+平方秩检验
+page检验
+cochran检验
+函数测试
+习题5
